@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="page-title">RAYnet: AI Models</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Pour les icônes de GitHub, Hugging Face et le mode jour/nuit -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            /* Permet le défilement */
+            overflow-y: auto; 
+        }
+
+        /* Styles pour le mode sombre par défaut */
+        .dark {
+            background-color: #121417;
+            color: #d1d5db; /* gray-200 */
+        }
+        .dark .card {
+            background-color: #1d1f23;
+        }
+        .dark .footer {
+            background-color: #1d1f23;
+        }
+        .dark .text-gray-400 {
+            color: #9ca3af;
+        }
+
+        /* Styles pour le mode clair */
+        .light {
+            background-color: #f3f4f6; /* gray-100 */
+            color: #1f2937; /* gray-900 */
+        }
+        .light .card {
+            background-color: #ffffff;
+        }
+        .light .footer {
+            background-color: #e5e7eb; /* gray-200 */
+        }
+        /* Ajustement pour un meilleur contraste en mode clair */
+        .light .text-gray-400 {
+            color: #4b5563; /* gray-600 */
+        }
+        
+        /* Assure que les titres et les textes en blanc deviennent noirs en mode clair */
+        .light h1, .light h2, .light h3, .light h4, .light .text-white {
+            color: #1f2937 !important; /* gray-900 */
+        }
+
+        /* Styles spécifiques à l'animation */
+        #animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body class="dark">
+
+    <!-- Conteneur d'arrière-plan pour l'animation -->
+    <div id="animation-container">
+        <canvas id="neural-net-canvas"></canvas>
+    </div>
+
+    <!-- Conteneur principal pour le contenu, permet le défilement -->
+    <div class="relative z-10 w-full">
+
+        <!-- Navbar -->
+        <nav class="container mx-auto px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="RAYnet Logo" class="h-10 w-10">
+                <span class="text-xl font-semibold">RAYnet</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#overview" class="text-sm hover:text-white transition-colors" data-lang-key="nav-overview">Overview</a>
+                <a href="#models" class="text-sm hover:text-white transition-colors" data-lang-key="nav-models">Models</a>
+                <a href="download.html" class="text-sm hover:text-white transition-colors" data-lang-key="nav-download">Download RAYnet Software</a>
+                <a href="https://github.com/ray1-cmd" target="_blank" class="text-sm hover:text-white transition-colors" data-lang-key="nav-docs">Docs</a>
+                <button onclick="window.open('https://huggingface.co/RAY-AIT', '_blank')" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-lang-key="nav-test">Test RAYnet</button>
+                <button id="lang-switcher" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">FR</button>
+                <button id="theme-switcher" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+            <div class="md:hidden">
+                <!-- Mobile menu button -->
+            </div>
+        </nav>
+
+        <!-- Section principale -->
+        <main class="container mx-auto p-4 md:p-8 rounded-lg">
+            <section id="overview" class="card rounded-2xl p-6 md:p-16 mb-12 shadow-xl">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-left">
+                        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4" data-lang-key="overview-title">RAYnet: AI Models for Classification, Detection, and Segmentation</h1>
+                        <p class="text-gray-400 text-base md:text-lg mb-6" data-lang-key="overview-text">
+                            RAYnet offers AI models for various computer vision tasks. Explore our models and integrate them into your projects.
+                        </p>
+                        <button onclick="window.open('https://huggingface.co/RAY-AIT', '_blank')" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors" data-lang-key="overview-button">
+                            Test RAYnet
+                        </button>
+                    </div>
+                    <div class="hidden md:flex justify-center">
+                        <img src="logo.png" alt="RAYnet Logo" class="w-[500px] h-[500px] object-cover rounded-lg">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section RAYnet-1A -->
+            <section id="models" class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">RAYnet-1A</h2>
+                <p class="text-gray-400 mb-6" data-lang-key="by-ray">
+                    By RAY AUTRA TECHNOLOGY
+                </p>
+                <h3 class="text-xl font-bold mb-4" data-lang-key="model-desc-title">Model Description</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-microchip text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="model-name">Model Name</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            RAYnet-1A.23M
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-list-ol text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="parameters">Parameters</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            23M
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-tasks text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="tasks">Tâches</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            Classification, Detection, Segmentation
+                        </p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mt-6" data-lang-key="raynet1a-text">
+                    RAYnet-1A est une architecture de réseau de neurones convolutionnels (CNN) conçue pour la classification d'images. Avec environ 23 millions de paramètres, il est optimisé pour trouver un bon équilibre entre la précision et l'efficacité de calcul. Sa conception en fait un modèle particulièrement adapté pour des applications qui requièrent des performances rapides, comme le traitement en temps réel sur des appareils mobiles ou embarqués.
+                </p>
+                <div class="flex space-x-4 mt-6">
+                    <a href="https://github.com/ray1-cmd" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        <i class="fab fa-github mr-2"></i>
+                        GitHub
+                    </a>
+                    <a href="https://huggingface.co/RAY-AIT/RAYnet-1A.23M" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        <i class="fab fa-huggingface mr-2"></i>
+                        Hugging Face
+                    </a>
+                </div>
+            </section>
+
+            <!-- Section RAYnet-2A -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">RAYnet-2A</h2>
+                <p class="text-gray-400 mb-6" data-lang-key="by-ray-2">
+                    Par RAY AUTRA TECHNOLOGY
+                </p>
+                <h3 class="text-xl font-bold mb-4" data-lang-key="model-desc-title-2">Description du modèle</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-microchip text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="model-name-2">Nom du modèle</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            RAYnet-2A.124mlite
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-list-ol text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="parameters-2">Paramètres</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            124M
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-tasks text-blue-500 mr-2"></i>
+                            <h4 class="font-semibold text-white text-lg" data-lang-key="tasks-2">Tâches</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">
+                            Classification, Detection, Segmentation
+                        </p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mt-6" data-lang-key="raynet2a-text">
+                    RAYnet-2A.200mlite est une deuxième architecture de réseau de neurones convolutionnels (CNN) de la famille RAYnet. Avec environ 124 millions de paramètres, vous pouvez l'utiliser pour des tâches de classification d'images, et vous pouvez également faire des essais sur la détection d'images et la segmentation d'images.
+                </p>
+                <div class="flex space-x-4 mt-6">
+                    <a href="https://github.com/ray1-cmd" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        <i class="fab fa-github mr-2"></i>
+                        GitHub
+                    </a>
+                    <a href="https://huggingface.co/RAY-AIT/RAYnet-2A.124mlite" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        <i class="fab fa-huggingface mr-2"></i>
+                        Hugging Face
+                    </a>
+                </div>
+            </section>
+
+            <!-- Section Définition des tâches -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold mb-4" data-lang-key="tasks-definitions-title">Définition des tâches</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <h4 class="font-semibold text-white text-lg mb-2" data-lang-key="task-classification-title">Classification d'images</h4>
+                        <p class="text-sm text-gray-400" data-lang-key="task-classification-text">
+                            La classification d'images est le processus d'attribution d'une étiquette ou d'une classe à une image entière. Le modèle répond à la question "Qu'est-ce que cette image?".
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <h4 class="font-semibold text-white text-lg mb-2" data-lang-key="task-detection-title">Détection d'objets</h4>
+                        <p class="text-sm text-gray-400" data-lang-key="task-detection-text">
+                            La détection d'objets consiste à identifier et localiser les objets dans une image. Le modèle dessine des boîtes englobantes autour des objets trouvés.
+                        </p>
+                    </div>
+                    <div class="card p-6 rounded-lg shadow-md">
+                        <h4 class="font-semibold text-white text-lg mb-2" data-lang-key="task-segmentation-title">Segmentation d'images</h4>
+                        <p class="text-sm text-gray-400" data-lang-key="task-segmentation-text">
+                            La segmentation d'images est une tâche qui va au-delà de la détection en classifiant chaque pixel d'une image. Elle permet une compréhension plus détaillée de la scène en délimitant les contours exacts des objets.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Licence -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold mb-4" data-lang-key="license-title">Licence</h2>
+                <p class="text-gray-400" data-lang-key="license-text">
+                    Ce modèle est distribué sous la <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" class="text-blue-400 hover:underline">licence Apache 2.0</a>. Vous pouvez trouver une copie complète de la licence dans le fichier LICENSE du dépôt.
+                </p>
+            </section>
+
+            <!-- Section Contact -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold mb-4" data-lang-key="contact-title">Contact</h2>
+                <p class="text-gray-400" data-lang-key="contact-text">
+                    Pour toute question ou assistance, veuillez nous contacter à l'adresse <a href="mailto:raynet.raytetch.ai@gmail.com" class="text-blue-400 hover:underline">raynet.raytetch.ai@gmail.com</a>.
+                </p>
+            </section>
+        </main>
+
+    </div> <!-- Fin du conteneur de défilement -->
+    
+    <!-- Footer -->
+    <footer class="footer text-gray-400 py-6 px-8 rounded-t-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <p class="text-sm mb-4 md:mb-0" data-lang-key="footer-text">© 2025 RAY AUTRA TECHNOLOGY. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const translations = {
+                en: {
+                    "page-title": "RAYnet: AI Models",
+                    "nav-overview": "Overview",
+                    "nav-models": "Models",
+                    "nav-download": "Download RAYnet Software",
+                    "nav-docs": "Docs",
+                    "nav-test": "Test RAYnet",
+                    "overview-title": "RAYnet: AI Models for Classification, Detection, and Segmentation",
+                    "overview-text": "RAYnet offers AI models for various computer vision tasks. Explore our models and integrate them into your projects.",
+                    "overview-button": "Test RAYnet",
+                    "by-ray": "By RAY AUTRA TECHNOLOGY",
+                    "model-desc-title": "Model Description",
+                    "model-name": "Model Name",
+                    "parameters": "Parameters",
+                    "tasks": "Tasks",
+                    "raynet1a-text": "RAYnet-1A is a Convolutional Neural Network (CNN) architecture designed for image classification. With approximately 23 million parameters, it is optimized to find a good balance between accuracy and computational efficiency. Its design makes it a particularly suitable model for applications that require fast performance, such as real-time processing on mobile or embedded devices.",
+                    "by-ray-2": "By RAY AUTRA TECHNOLOGY",
+                    "model-desc-title-2": "Model Description",
+                    "model-name-2": "Model Name",
+                    "parameters-2": "Parameters",
+                    "tasks-2": "Tasks",
+                    "raynet2a-text": "RAYnet-2A.200mlite is a second Convolutional Neural Network (CNN) architecture from the RAYnet family. With approximately 124 million parameters, you can use it for image classification tasks, and you can also try it on image detection and image segmentation.",
+                    "tasks-definitions-title": "Task Definitions",
+                    "task-classification-title": "Image Classification",
+                    "task-classification-text": "Image classification is the process of assigning a single label or class to an entire image. The model answers the question \"What is this image?\".",
+                    "task-detection-title": "Object Detection",
+                    "task-detection-text": "Object detection involves identifying and localizing objects within an image. The model draws bounding boxes around the objects it finds.",
+                    "task-segmentation-title": "Image Segmentation",
+                    "task-segmentation-text": "Image segmentation is a task that goes beyond detection by classifying every pixel in an image. It allows for a more detailed understanding of the scene by outlining the exact boundaries of objects.",
+                    "license-title": "License",
+                    "license-text": "This model is distributed under the <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank' class='text-blue-400 hover:underline'>Apache 2.0 license</a>. You can find a full copy of the license in the LICENSE file of the repository.",
+                    "contact-title": "Contact",
+                    "contact-text": "For any questions or assistance, please contact us at <a href='mailto:raynet.raytetch.ai@gmail.com' class='text-blue-400 hover:underline'>raynet.raytetch.ai@gmail.com</a>.",
+                    "footer-text": "© 2025 RAY AUTRA TECHNOLOGY. All rights reserved."
+                },
+                fr: {
+                    "page-title": "RAYnet: Modèles d'IA",
+                    "nav-overview": "Aperçu",
+                    "nav-models": "Modèles",
+                    "nav-download": "Télécharger le logiciel RAYnet",
+                    "nav-docs": "Docs",
+                    "nav-test": "Tester RAYnet",
+                    "overview-title": "RAYnet: Modèles d'IA pour la Classification, Détection et Segmentation",
+                    "overview-text": "RAYnet propose des modèles d'IA pour diverses tâches de vision par ordinateur. Explorez nos modèles et intégrez-les dans vos projets.",
+                    "overview-button": "Tester RAYnet",
+                    "by-ray": "Par RAY AUTRA TECHNOLOGY",
+                    "model-desc-title": "Description du modèle",
+                    "model-name": "Nom du modèle",
+                    "parameters": "Paramètres",
+                    "tasks": "Tâches",
+                    "raynet1a-text": "RAYnet-1A est une architecture de réseau de neurones convolutionnels (CNN) conçue pour la classification d'images. Avec environ 23 millions de paramètres, il est optimisé pour trouver un bon équilibre entre la précision et l'efficacité de calcul. Sa conception en fait un modèle particulièrement adapté pour des applications qui requièrent des performances rapides, comme le traitement en temps réel sur des appareils mobiles ou embarqués.",
+                    "by-ray-2": "Par RAY AUTRA TECHNOLOGY",
+                    "model-desc-title-2": "Description du modèle",
+                    "model-name-2": "Nom du modèle",
+                    "parameters-2": "Paramètres",
+                    "tasks-2": "Tâches",
+                    "raynet2a-text": "RAYnet-2A.200mlite est une deuxième architecture de réseau de neurones convolutionnels (CNN) de la famille RAYnet. Avec environ 124 millions de paramètres, vous pouvez l'utiliser pour des tâches de classification d'images, et vous pouvez également faire des essais sur la détection d'images et la segmentation d'images.",
+                    "tasks-definitions-title": "Définition des tâches",
+                    "task-classification-title": "Classification d'images",
+                    "task-classification-text": "La classification d'images est le processus d'attribution d'une étiquette ou d'une classe à une image entière. Le modèle répond à la question \"Qu'est-ce que cette image?\".",
+                    "task-detection-title": "Détection d'objets",
+                    "task-detection-text": "La détection d'objets consiste à identifier et localiser les objets dans une image. Le modèle dessine des boîtes englobantes autour des objets trouvés.",
+                    "task-segmentation-title": "Segmentation d'images",
+                    "task-segmentation-text": "La segmentation d'images est une tâche qui va au-delà de la détection en classifiant chaque pixel d'une image. Elle permet une compréhension plus détaillée de la scène en délimitant les contours exacts des objets.",
+                    "license-title": "Licence",
+                    "license-text": "Ce modèle est distribué sous la <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank' class='text-blue-400 hover:underline'>licence Apache 2.0</a>. Vous pouvez trouver une copie complète de la licence dans le fichier LICENSE du dépôt.",
+                    "contact-title": "Contact",
+                    "contact-text": "Pour toute question ou assistance, veuillez nous contacter à l'adresse <a href='mailto:raynet.raytetch.ai@gmail.com' class='text-blue-400 hover:underline'>raynet.raytetch.ai@gmail.com</a>.",
+                    "footer-text": "© 2025 RAY AUTRA TECHNOLOGY. Tous droits réservés."
+                }
+            };
+
+            const langSwitcher = document.getElementById('lang-switcher');
+            const themeSwitcher = document.getElementById('theme-switcher');
+            const body = document.body;
+            const elements = document.querySelectorAll('[data-lang-key]');
+            
+            let currentLang = localStorage.getItem('lang') || 'en';
+            let currentTheme = localStorage.getItem('theme') || 'dark';
+
+            const setLanguage = (lang) => {
+                document.documentElement.lang = lang;
+                langSwitcher.innerText = lang.toUpperCase() === 'EN' ? 'FR' : 'EN';
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+                localStorage.setItem('lang', lang);
+            };
+
+            const setTheme = (theme) => {
+                if (theme === 'dark') {
+                    body.classList.remove('light');
+                    body.classList.add('dark');
+                    themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    body.classList.remove('dark');
+                    body.classList.add('light');
+                    themeSwitcher.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+                localStorage.setItem('theme', theme);
+            };
+
+            // Fonction pour l'animation en arrière-plan
+            const canvas = document.getElementById('neural-net-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+
+            const resizeCanvas = () => {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            };
+
+            const particles = [];
+            const maxParticles = 100;
+            const connectionDistance = 150;
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x || Math.random() * width;
+                    this.y = y || Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 1;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.fill();
+                }
+            }
+
+            const createParticles = () => {
+                let numCreated = 0;
+                const interval = setInterval(() => {
+                    if (numCreated < maxParticles) {
+                        particles.push(new Particle());
+                        numCreated++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 50);
+            };
+
+            const animate = () => {
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < connectionDistance) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            // Effet de fusion : l'opacité et la largeur de la ligne augmentent à mesure que les particules se rapprochent
+                            ctx.strokeStyle = `rgba(96, 165, 250, ${1 - distance / connectionDistance})`;
+                            ctx.lineWidth = 1 - (distance / connectionDistance);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            };
+
+            // Initialisation et événements
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            setLanguage(currentLang);
+            setTheme(currentTheme);
+            createParticles();
+            animate();
+
+            langSwitcher.addEventListener('click', () => {
+                currentLang = currentLang === 'en' ? 'fr' : 'en';
+                setLanguage(currentLang);
+            });
+
+            themeSwitcher.addEventListener('click', () => {
+                currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(currentTheme);
+            });
+        });
+    </script>
+</body>
+</html>

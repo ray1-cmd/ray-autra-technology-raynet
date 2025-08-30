@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="page-title">Télécharger RAYnet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden; /* Cache les barres de défilement pour l'animation */
+        }
+        .dark {
+            background-color: #121417;
+            color: #d1d5db;
+        }
+        .light {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .light h1, .light p, .light .text-gray-400, .light .text-white {
+            color: #1f2937 !important;
+        }
+        #animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        canvas {
+            display: block;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .header-buttons {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Styles adaptatifs pour les boutons */
+        .theme-aware-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark .theme-aware-button {
+            background-color: #1f2937; /* gray-800 */
+            color: white;
+        }
+        .dark .theme-aware-button:hover {
+            background-color: #374151; /* gray-700 */
+        }
+        .light .theme-aware-button {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #1f2937; /* gray-900 */
+        }
+        .light .theme-aware-button:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+    </style>
+</head>
+<body class="dark">
+    <div id="animation-container">
+        <canvas id="neural-net-canvas"></canvas>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="absolute top-4 left-4 font-semibold py-2 px-4 rounded-lg transition-colors theme-aware-button" data-lang-key="home-link">
+            Accueil
+        </a>
+        <div class="header-buttons">
+            <button id="lang-switcher" class="font-semibold py-2 px-4 rounded-lg transition-colors theme-aware-button">FR</button>
+            <button id="theme-switcher" class="font-semibold py-2 px-4 rounded-lg transition-colors theme-aware-button">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold mb-2">RAYnet</h1>
+        <p class="text-2xl md:text-3xl text-gray-400 mb-8 font-semibold">
+            RAY AUTRA TECHNOLOGY
+        </p>
+        <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl" data-lang-key="app-description">
+            RAYnet Train Software est une application de bureau conçue pour l'entraînement de modèles d'IA sur des tâches de classification, de segmentation et de détection, sans nécessiter de codage.
+        </p>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors cursor-not-allowed" disabled data-lang-key="download-button">
+            Télécharger
+        </button>
+        <span class="text-gray-400 mt-2" data-lang-key="coming-soon">
+            À venir
+        </span>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('neural-net-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        const resizeCanvas = () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const maxParticles = 100;
+        const connectionDistance = 150;
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x || Math.random() * width;
+                this.y = y || Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#60a5fa';
+                ctx.fill();
+            }
+        }
+
+        const createParticles = () => {
+            let numCreated = 0;
+            const interval = setInterval(() => {
+                if (numCreated < maxParticles) {
+                    particles.push(new Particle());
+                    numCreated++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 50);
+        };
+
+        const animate = () => {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(96, 165, 250, ${1 - distance / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        };
+
+        const translations = {
+            en: {
+                "page-title": "Download RAYnet TS",
+                "home-link": "Home",
+                "app-description": "RAYnet Train Software is a desktop application designed to train AI models for classification, segmentation, and detection tasks, without requiring any coding.",
+                "download-button": "Download",
+                "coming-soon": "Coming Soon"
+            },
+            fr: {
+                "page-title": "Télécharger RAYnet TS",
+                "home-link": "Accueil",
+                "app-description": "RAYnet Train Software est une application de bureau conçue pour l'entraînement de modèles d'IA sur des tâches de classification, de segmentation et de détection, sans nécessiter de codage.",
+                "download-button": "Télécharger",
+                "coming-soon": "À venir"
+            }
+        };
+
+        const langSwitcher = document.getElementById('lang-switcher');
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const body = document.body;
+        const elements = document.querySelectorAll('[data-lang-key]');
+        
+        // Change the default language to English
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+
+        const setLanguage = (lang) => {
+            document.documentElement.lang = lang;
+            langSwitcher.innerText = lang.toUpperCase() === 'EN' ? 'FR' : 'EN';
+            elements.forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            localStorage.setItem('lang', lang);
+        };
+
+        const setTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                themeSwitcher.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('theme', theme);
+        };
+
+        langSwitcher.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'fr' : 'en';
+            setLanguage(currentLang);
+        });
+
+        themeSwitcher.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(currentTheme);
+        });
+        
+        window.onload = function() {
+            setLanguage(currentLang);
+            setTheme(currentTheme);
+            createParticles();
+            animate();
+        };
+    </script>
+</body>
+</html>
